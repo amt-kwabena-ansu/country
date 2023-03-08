@@ -3,23 +3,25 @@ import axios from 'axios'
 import './style.css'
 import Filter from '../../components/Filter/Filter'
 import {Link} from 'react-router-dom'
+// import countryName from '../../countryName'
 
 function Home() {
   type resultType={
     name:string,
+    population:number,
     region:string,
     capital:string,
     flag:string
   }
   const[result,setResult]= useState<resultType[]>([])
-  const[loading,setLoading]= useState <boolean>(false)
+  const[isLoading,setIsLoading]= useState <boolean>(false)
   const [search, setSearch] = useState<string>('')
   const [filter, setFilter] = useState<string>('')
   const [err, setErr] = useState<boolean>(false)
   
   useEffect(()=>{
     async function all (){
-      setLoading(true)
+      setIsLoading(true)
       const http =axios.create({baseURL :'https://restcountries.com/v2'})
       let response:any 
       try{
@@ -28,7 +30,7 @@ function Home() {
         setErr(true)
       }
       setResult(response.data)
-      setLoading(false)
+      setIsLoading(false)
   }
   all();
   },[])
@@ -53,15 +55,17 @@ function Home() {
       <Filter filter={filter} search={search} setFilter={setFilter} setSearch={setSearch}/>
       {err && <div> <h1>We sorry there was something wrong</h1></div>}
       {
-        !err && loading && <div>loading</div>
+        !err && isLoading && <div>loading</div>
       }
-      {!err && !loading && reOganize().map((val)=>(
+      {!err && !isLoading && reOganize().map((val)=>(
         <Link to={'/'+val.name}>
         <div className='countryTab'>
           <img className='flagImg' alt={val.name}src={val.flag}/>
+          <div className='countryName'>{'Population: '+val.population.toLocaleString()}</div>
           <div className='name'>{val.name}</div>
           <div className='capital'>{val.capital}</div>
           <div className='region'>{val.region}</div>
+          {}
         </div>
         </Link>
       ))

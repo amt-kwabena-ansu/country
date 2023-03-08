@@ -10,7 +10,7 @@ function Country({cName}:cName) {
     name:string,
     Nativename:string,
     region:string,
-    subRegion:string,
+    subregion:string,
     capital:string,
     flag:string,
     population:number,
@@ -20,38 +20,53 @@ function Country({cName}:cName) {
     borders:string[]
   }
   const[result,setResult]= useState<resultType[]>([])
-  const[loading,setLoading]= useState <boolean>(false)
+  const[isLoading,setIsLoading]= useState <boolean>(false)
   const [err, setErr] = useState<boolean>(false)
+  const [border, setBorder] = useState<any[]>(['None'])
+  const [isBorder, setIsBorder] = useState<boolean>(false)
   useEffect(()=>{
     async function all (){
-      setLoading(true)
+      setIsLoading(true)
       const http =axios.create({baseURL :'https://restcountries.com/v2/name'})
       let response:any;
       try{
       response = await http.get('/'+cName +'?fullText=true')
       }catch(e){setErr(true)
-      console.log('Error ')}    
+      console.log('Error ')} 
+      let output:resultType[] = response.data  
+      if(output[0].borders){
+        let promises=output[0].borders.map(async(cntry)=>(await axios.get('https://restcountries.com/v2/alpha?codes='+cntry))) 
+        let reply = await Promise.all(promises);
+        let countries = reply.map((response) => response.data[0].name);
+        setBorder(countries)
+
+        console.log(border)
+
+        setIsBorder(true)
+      }
       setResult(response.data)
-      setLoading(false)
+      setIsLoading(false)
       console.log(response.data)
     }
     all();
+
   },[])
-  
+
+
   return (
     <div>
       {err && <div> <h1>There is an error Sorry </h1></div>}
       {
-        !err&& loading && <div>loading</div>
+        !err&& isLoading && <div>loading</div>
       }
-      {
-        !err && !loading && result.map((val)=>(
+      { 
+        !err && !isLoading && result.map((val)=>(
           <div className='countryTab'>
             <img className='flagImg' src={val.flag}/>
             <div className='countryName'>{'Name: '+val.name}</div>
-            <div className='countryName'>{'Population: '+val.population}</div>
+            <div className='countryName'>{'Population: '+val.population.toLocaleString()}</div>
             <div className='countryName'>{'Region: '+val.region}</div>
-            <div className='countryName'>{'Sub region: '+val.subRegion}</div>
+            <div className='countryName'>{'Sub region: '+val.subregion}</div>
             <div className='countryName'>{'Capital: '+val.capital}</div>
             <div className='countryName'>{'Top level domain: '+val.topLevelDomain}</div>
             <div className='countryName'>{'Currencies : '+val.currencies.map((currency)=>(
@@ -60,7 +75,7 @@ function Country({cName}:cName) {
             <div className='countryName'>{'Languages : '+val.languages.map((lang)=>(
               lang.name
             ))}</div>
-            <div className='countryName'>{val.borders &&'Border countries : '+val.borders.map((cntry)=>(cntry))}</div>
+            <div>Border countries : <div className='countryName'>{isBorder && border.map((Country)=>(Country+' '))}</div></div>
           </div>
         ))
       }
