@@ -41,10 +41,10 @@ function Country({cName}:cName) {
         !err && !loading && result.map((val, ind)=>(
           <div key={ind+'box'} className=''>
             <div className='flex flex-col px-4 laptop:flex-row laptop:px-0 laptop:gap-10 pc:gap-36' key={ind+'main'}>
-              <img className=' laptop:w-[40%] laptop:h-[50%] rounded-xl aspect-4/3' key={ind+'flag'} src={val.flag}/>
+              <img className=' laptop:w-[45%] laptop:min-w-[450px] rounded-xl aspect-4/3' key={ind+'flag'} src={val.flag} alt={'Flag of '+val.name}/>
               <div className='laptop:pt-10' key={ind+'content'}>
                 <div className='text-2xl font-extrabold mt-11 mb-4 laptop:mt-0 laptop:mb-0' key={ind+'name'}>{val.name}</div>
-                <div className='flex flex-col gap-8 laptop:flex-row laptop:gap-28 laptop:pt-5 pc:gap-36 pc:pt-10 text-base' key={ind+'inner-content'}>
+                <div className='flex flex-col gap-8 text-base laptop:flex-row laptop:gap-28 laptop:pt-5 pc:gap-36 pc:pt-10' key={ind+'inner-content'}>
                   <div className='font-bold' key={ind+'first'}>
                     <div className='' key={ind+'native'}>Native name: <span className=' font-light' key={ind+'native-val'}>{val.nativeName}</span></div>
                     <div className='' key={ind+'population'}>Population:  <span className='font-light' key={ind+'population-val'}>{val.population.toLocaleString()}</span></div>
