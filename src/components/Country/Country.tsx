@@ -1,7 +1,7 @@
 import React from 'react'
 import{useEffect, useState } from 'react'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
+import { singleCountry } from '../../api/api'
 type cName={cName:string}
 
 function Country({cName}:cName) {
@@ -25,34 +25,8 @@ function Country({cName}:cName) {
   const [border, setBorder] = useState<string[]>(['None'])
   const [boolborder, setBoolborder] = useState<boolean>(false)
   useEffect(()=>{
-    async function all (){
-      setLoading(true)
-      const http =axios.create({baseURL :'https://restcountries.com/v2/name'})
-      let response:any;
-      try{
-      response = await http.get('/'+cName +'?fullText=true')
-      }catch(e){setErr(true)
-      console.log('Error ')} 
-        let output:resultType[] = response.data  
-        if(output[0].borders){
-          let promises=output[0].borders.map(async(cntry)=>(await axios.get('https://restcountries.com/v2/alpha?codes='+cntry))) 
-          let reply = await Promise.all(promises);
-          let countries = reply.map((response) => response.data[0].name);
-          setBorder(countries)
-
-          console.log(border)
-
-          setBoolborder(true)
-        }else{
-          console.log(border)
-        }
-      setResult(response.data)
-      setLoading(false)
-      console.log(response.data)
-    }
-    all();
-
-  },[])
+    singleCountry(setLoading,setErr,setBorder,setBoolborder,setResult,cName)
+  },[cName])
 
 
   return (
@@ -66,11 +40,11 @@ function Country({cName}:cName) {
       { 
         !err && !loading && result.map((val, ind)=>(
           <div key={ind+'box'} className=''>
-            <div className='flex gap-36 pt-20' key={ind+'main'}>
-              <img className=' w-[40%] rounded-lg aspect-4/3' key={ind+'flag'} src={val.flag}/>
-              <div className='pt-10' key={ind+'content'}>
-                <div className='text-2xl font-extrabold' key={ind+'name'}>{val.name}</div>
-                <div className='flex gap-36 pt-10 text-base' key={ind+'inner-content'}>
+            <div className='flex flex-col px-4 laptop:flex-row laptop:px-0 laptop:gap-10 pc:gap-36' key={ind+'main'}>
+              <img className=' laptop:w-[40%] laptop:h-[50%] rounded-xl aspect-4/3' key={ind+'flag'} src={val.flag}/>
+              <div className='laptop:pt-10' key={ind+'content'}>
+                <div className='text-2xl font-extrabold mt-11 mb-4 laptop:mt-0 laptop:mb-0' key={ind+'name'}>{val.name}</div>
+                <div className='flex flex-col gap-8 laptop:flex-row laptop:gap-28 laptop:pt-5 pc:gap-36 pc:pt-10 text-base' key={ind+'inner-content'}>
                   <div className='font-bold' key={ind+'first'}>
                     <div className='' key={ind+'native'}>Native name: <span className=' font-light' key={ind+'native-val'}>{val.nativeName}</span></div>
                     <div className='' key={ind+'population'}>Population:  <span className='font-light' key={ind+'population-val'}>{val.population.toLocaleString()}</span></div>
@@ -88,9 +62,9 @@ function Country({cName}:cName) {
                     ))}</div>
                   </div>
                 </div>
-                <div className='flex gap-4 pt-16 pr-16' key={ind+'border'}><div className='w-[20%]' key={ind+'border-label'}>Border countries:</div> <div className='flex flex-wrap gap-3' key={ind+'border-val'}>{boolborder && border.map((Country,ind3)=>(
+                <div className='flex gap-4 pt-16 pr-16 flex-col laptop:flex-row' key={ind+'border'}><div className=' laptop:min-w-[127px]' key={ind+'border-label'}>Border countries:</div> <div className='flex flex-wrap gap-3' key={ind+'border-val'}>{boolborder && border.map((Country,ind3)=>(
                   <Link key={ind3+'link'} to={'/'+Country}>
-                    <button className=' bg-white dark:bg-blue w-fit h-7 px-7 rounded-sm shadow-around' key={ind3+'country-button'}>{Country}</button>
+                    <button className=' bg-white dark:bg-blue w-fit h-fit min-h-7 px-7 rounded-sm shadow-around dark:shadow-around-dark' key={ind3+'country-button'}>{Country}</button>
                   </Link>))}</div>
                 </div>
               </div>
