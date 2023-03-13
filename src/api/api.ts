@@ -54,7 +54,6 @@ export async function singleCountry (setLoading:boolHook,setErr:boolHook,setBord
         console.log('Error ')
     } 
     
-    console.log(response)
     let output:resultTypeCountry[] = response.data  
     if(output[0].borders){
       let promises=output[0].borders.map(async(cntry)=>(await axios.get('https://restcountries.com/v2/alpha?codes='+cntry))) 
@@ -65,5 +64,4 @@ export async function singleCountry (setLoading:boolHook,setErr:boolHook,setBord
       }
     setResult(response.data)
     setLoading(false)
-    console.log(response.data)
   }

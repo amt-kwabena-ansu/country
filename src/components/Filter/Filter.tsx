@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
@@ -18,7 +18,7 @@ function Filter({search,setSearch,filter,setFilter}:search) {
         </div>
         <input type="text"
         placeholder='Search for a country...'
-        className=' bg-white dark:bg-blue h-12 dark:text-white rounded-lg outline-0'
+        className=' bg-white dark:bg-blue h-12 dark:text-white rounded-lg focus:outline-none'
         value={search}
         onChange={(e)=>{setSearch(e.target.value)}}/>
       </div>
