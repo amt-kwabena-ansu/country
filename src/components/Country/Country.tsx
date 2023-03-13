@@ -1,14 +1,14 @@
 import React from 'react'
 import{useEffect, useState } from 'react'
-import axios from 'axios'
-import './style.css'
+import { Link } from 'react-router-dom'
+import { singleCountry } from '../../api/api'
 type cName={cName:string}
 
 function Country({cName}:cName) {
   console.log(cName)
   type resultType={
     name:string,
-    Nativename:string,
+    nativeName:string,
     region:string,
     subregion:string,
     capital:string,
@@ -20,62 +20,55 @@ function Country({cName}:cName) {
     borders:string[]
   }
   const[result,setResult]= useState<resultType[]>([])
-  const[isLoading,setIsLoading]= useState <boolean>(false)
+  const[loading,setLoading]= useState <boolean>(false)
   const [err, setErr] = useState<boolean>(false)
-  const [border, setBorder] = useState<any[]>(['None'])
-  const [isBorder, setIsBorder] = useState<boolean>(false)
+  const [border, setBorder] = useState<string[]>(['None'])
+  const [boolborder, setBoolborder] = useState<boolean>(false)
   useEffect(()=>{
-    async function all (){
-      setIsLoading(true)
-      const http =axios.create({baseURL :'https://restcountries.com/v2/name'})
-      let response:any;
-      try{
-      response = await http.get('/'+cName +'?fullText=true')
-      }catch(e){setErr(true)
-      console.log('Error ')} 
-      let output:resultType[] = response.data  
-      if(output[0].borders){
-        let promises=output[0].borders.map(async(cntry)=>(await axios.get('https://restcountries.com/v2/alpha?codes='+cntry))) 
-        let reply = await Promise.all(promises);
-        let countries = reply.map((response) => response.data[0].name);
-        setBorder(countries)
-
-        console.log(border)
-
-        setIsBorder(true)
-      }
-      setResult(response.data)
-      setIsLoading(false)
-      console.log(response.data)
-    }
-    all();
-
-  },[])
+    singleCountry(setLoading,setErr,setBorder,setBoolborder,setResult,cName)
+  },[cName])
 
 
   return (
-    <div>
-      {err && <div> <h1>There is an error Sorry </h1></div>}
+    <div className=''>
+      {err && <div 
+      className=''> <h1>There is an error Sorry </h1></div>}
       {
-        !err&& isLoading && <div>loading</div>
+        !err&& loading && <div 
+        className=''>loading</div>
       }
       { 
-        !err && !isLoading && result.map((val)=>(
-          <div className='countryTab'>
-            <img className='flagImg' src={val.flag}/>
-            <div className='countryName'>{'Name: '+val.name}</div>
-            <div className='countryName'>{'Population: '+val.population.toLocaleString()}</div>
-            <div className='countryName'>{'Region: '+val.region}</div>
-            <div className='countryName'>{'Sub region: '+val.subregion}</div>
-            <div className='countryName'>{'Capital: '+val.capital}</div>
-            <div className='countryName'>{'Top level domain: '+val.topLevelDomain}</div>
-            <div className='countryName'>{'Currencies : '+val.currencies.map((currency)=>(
-            currency.name
-            ))}</div>
-            <div className='countryName'>{'Languages : '+val.languages.map((lang)=>(
-              lang.name
-            ))}</div>
-            <div>Border countries : <div className='countryName'>{isBorder && border.map((Country)=>(Country+' '))}</div></div>
+        !err && !loading && result.map((val, ind)=>(
+          <div key={ind+'box'} className=''>
+            <div className='flex flex-col px-4 laptop:flex-row laptop:px-0 laptop:gap-10 pc:gap-36' key={ind+'main'}>
+              <img className=' laptop:w-[40%] laptop:h-[50%] rounded-xl aspect-4/3' key={ind+'flag'} src={val.flag}/>
+              <div className='laptop:pt-10' key={ind+'content'}>
+                <div className='text-2xl font-extrabold mt-11 mb-4 laptop:mt-0 laptop:mb-0' key={ind+'name'}>{val.name}</div>
+                <div className='flex flex-col gap-8 laptop:flex-row laptop:gap-28 laptop:pt-5 pc:gap-36 pc:pt-10 text-base' key={ind+'inner-content'}>
+                  <div className='font-bold' key={ind+'first'}>
+                    <div className='' key={ind+'native'}>Native name: <span className=' font-light' key={ind+'native-val'}>{val.nativeName}</span></div>
+                    <div className='' key={ind+'population'}>Population:  <span className='font-light' key={ind+'population-val'}>{val.population.toLocaleString()}</span></div>
+                    <div className='' key={ind+'region'}>Region:  <span className=' font-light' key={ind+'region-val'}>{val.region}</span></div>
+                    <div className='' key={ind+'sub'}>Sub region:  <span className=' font-light' key={ind+'sub-val'}>{val.subregion}</span></div>
+                    <div className='' key={ind+'capital'}>Capital: <span className=' font-light' key={ind+'capital-val'}>{val.capital}</span></div>
+                  </div>
+                  <div className='font-bold' key={ind+'second'}>
+                    <div className='' key={ind+'domain'}>Top level domain:  <span className=' font-light' key={ind+'dommian-val'}>{val.topLevelDomain}</span></div>
+                    <div className='' key={ind+'curencey'}>Currencies:  {val.currencies && val.currencies.map((currency,ind0)=>(
+                      <span className=' font-light' key={ind0+'curency-val'}>{currency.name}</span>
+                    ))}</div>
+                    <div className='' key={ind+'lang'}>Languages:  {val.languages.map((lang,ind2)=>(
+                      <span className=' font-light' key={ind2+'lang-val'}>{lang.name}</span>
+                    ))}</div>
+                  </div>
+                </div>
+                <div className='flex gap-4 pt-16 pr-16 flex-col laptop:flex-row' key={ind+'border'}><div className=' laptop:min-w-[127px]' key={ind+'border-label'}>Border countries:</div> <div className='flex flex-wrap gap-3' key={ind+'border-val'}>{boolborder && border.map((Country,ind3)=>(
+                  <Link key={ind3+'link'} to={'/'+Country}>
+                    <button className=' bg-white dark:bg-blue w-fit h-fit min-h-7 px-7 rounded-sm shadow-around dark:shadow-around-dark' key={ind3+'country-button'}>{Country}</button>
+                  </Link>))}</div>
+                </div>
+              </div>
+            </div>
           </div>
         ))
       }
