@@ -5,7 +5,6 @@ import { singleCountry } from '../../api/api'
 type cName={cName:string}
 
 function Country({cName}:cName) {
-  console.log(cName)
   type resultType={
     name:string,
     nativeName:string,
@@ -41,7 +40,9 @@ function Country({cName}:cName) {
         !err && !loading && result.map((val, ind)=>(
           <div key={ind+'box'} className=''>
             <div className='flex flex-col px-4 laptop:flex-row laptop:px-0 laptop:gap-10 pc:gap-36' key={ind+'main'}>
-              <img className=' laptop:w-[45%] laptop:min-w-[450px] rounded-xl aspect-4/3' key={ind+'flag'} src={val.flag} alt={'Flag of '+val.name}/>
+              <div className=' rounded-2xl overflow-clip  laptop:min-w-[450px]'>
+              <img className=' aspect-4/3 w-full h-full' key={ind+'flag'} src={val.flag} alt={'Flag of '+val.name}/>
+              </div>
               <div className='laptop:pt-10' key={ind+'content'}>
                 <div className='text-2xl font-extrabold mt-11 mb-4 laptop:mt-0 laptop:mb-0' key={ind+'name'}>{val.name}</div>
                 <div className='flex flex-col gap-8 text-base laptop:flex-row laptop:gap-28 laptop:pt-5 pc:gap-36 pc:pt-10' key={ind+'inner-content'}>
@@ -57,9 +58,7 @@ function Country({cName}:cName) {
                     <div className='' key={ind+'curencey'}>Currencies:  {val.currencies && val.currencies.map((currency,ind0)=>(
                       <span className=' font-light' key={ind0+'curency-val'}>{currency.name}</span>
                     ))}</div>
-                    <div className='' key={ind+'lang'}>Languages:  {val.languages.map((lang,ind2)=>(
-                      <span className=' font-light' key={ind2+'lang-val'}>{lang.name}</span>
-                    ))}</div>
+                    <div className='' key={ind+'lang'}>Languages:  <span className=' font-light' key={ind+'lang-val'}>{val.languages.map((lang)=>(lang.name)).join(', ')}</span></div>
                   </div>
                 </div>
                 <div className='flex gap-4 pt-16 pr-16 flex-col laptop:flex-row' key={ind+'border'}><div className=' laptop:min-w-[127px]' key={ind+'border-label'}>Border countries:</div> <div className='flex flex-wrap gap-3' key={ind+'border-val'}>{boolborder && border.map((Country,ind3)=>(
