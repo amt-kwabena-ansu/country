@@ -40,8 +40,8 @@ function Country({cName}:cName) {
         !err && !loading && result.map((val, ind)=>(
           <div key={ind+'box'} className=''>
             <div className='grid px-4 laptop:grid-cols-2 laptop:px-0 laptop:gap-20 pc:gap-36' key={ind+'main'}>
-              <div className=' rounded-2xl overflow-clip laptop:h-[65%] laptop:min-w-[450px] pc:h-full'>
-              <img className=' aspect-4/3 w-full h-full ' key={ind+'flag'} src={val.flag} alt={'Flag of '+val.name}/>
+              <div className=' rounded-2xl overflow-clip laptop:min-w-[450px] pc:h-full'>
+              <img className=' w-full h-full rounded-2xl laptop:max-h-96 pc:h-full' key={ind+'flag'} src={val.flag} alt={'Flag of '+val.name}/>
               </div>
               <div className='laptop:pt-6 pc:pt-[5%]' key={ind+'content'}>
                 <div className='text-xl font-extrabold mt-11 mb-4 laptop:mt-0 laptop:mb-0' key={ind+'name'}>{val.name}</div>
