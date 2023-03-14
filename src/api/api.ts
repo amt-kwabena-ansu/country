@@ -11,7 +11,7 @@ type stringHook= React.Dispatch<React.SetStateAction<string[]>>
 type resultHook= React.Dispatch<React.SetStateAction<resultType[]>>
 
 
-//country
+//country page
 
 type resultTypeCountry={
     name:string,
