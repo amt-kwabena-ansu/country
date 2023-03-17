@@ -4,7 +4,7 @@ function Header() {
   const [theme, setTheme] = useState<string>('')
   useEffect(()=>{
       if(window.matchMedia('(prefers-color-scheme: dark)').matches){setTheme('dark')
-      localStorage.setItem('theme','dark')
+        localStorage.setItem('theme','dark')
       }else{
         setTheme('light')
         localStorage.setItem('theme','light')

@@ -16,7 +16,7 @@ function CountryPage() {
                 </div>
                 Back
               </Link>
-          <Country cName={name||''}/>
+          <Country countryName={name||''}/>
         </div>
     </div>
   )

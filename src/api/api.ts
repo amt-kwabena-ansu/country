@@ -1,67 +1,40 @@
 import axios from "axios";
-type resultType={
-    name:string,
-    region:string,
-    capital:string,
-    flag:string,
-    population:number
-  }
-type boolHook= React.Dispatch<React.SetStateAction<boolean>>
-type stringHook= React.Dispatch<React.SetStateAction<string[]>>
-type resultHook= React.Dispatch<React.SetStateAction<resultType[]>>
+import { resultTypeCountry, boolHook, stringHook,resultHook,resultHookCountry } from "../types";
+import { setCountry, getCountry, getNeighbourNames } from "../countries/allCountries";
 
-
-//country page
-
-type resultTypeCountry={
-    name:string,
-    nativeName:string,
-    region:string,
-    subregion:string,
-    capital:string,
-    flag:string,
-    population:number,
-    topLevelDomain:string,
-    currencies:[{name:string}],
-    languages:[{name:string}],
-    borders:string[]
-  }
-type resultHookCountry= React.Dispatch<React.SetStateAction<resultTypeCountry[]>>
 
 const http =axios.create({baseURL :'https://restcountries.com/v2'})
 
 export  async function all (setLoading:boolHook, setErr:boolHook, setResult:resultHook){
     setLoading(true)
-    let response:any 
+    let response:any;
     try{
       response= await http.get('/all')
     }catch(e){
       setErr(true)
     }
     setResult(response.data)
+    setCountry(response.data)
     setLoading(false)
 }
 
-export async function singleCountry (setLoading:boolHook,setErr:boolHook,setBorder:stringHook,setBoolborder:boolHook,setResult:resultHookCountry,cName:string){
+
+export function singleCountry (setLoading:boolHook,setErr:boolHook,setBorder:stringHook,setBoolborder:boolHook,setResult:resultHookCountry,countryName:string){
     setLoading(true)
     let response:any;
     try{
-        response = await http.get('/name/'+cName +'?fullText=true')
-        
+      response= getCountry(countryName)
     }catch(e){
-        console.log(e)
-        setErr(true)
-        console.log('Error ')
+      console.log(e)
+      setErr(true)
+      console.log('Error')
     } 
-    
-    let output:resultTypeCountry[] = response.data  
+    let output:resultTypeCountry[] = response
     if(output[0].borders){
-      let promises=output[0].borders.map(async(cntry)=>(await axios.get('https://restcountries.com/v2/alpha?codes='+cntry))) 
-      let reply = await Promise.all(promises);
-      let countries:any = reply.map((country) => country.data[0].name);
-      setBorder(countries)
+      let borders=getNeighbourNames(output[0].borders)
+      setBorder(borders)
       setBoolborder(true)
       }
-    setResult(response.data)
+    setResult(response)
     setLoading(false)
   }

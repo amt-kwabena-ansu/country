@@ -1,31 +1,19 @@
-import React from 'react'
-import{useEffect, useState } from 'react'
+import React,{useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { singleCountry } from '../../api/api'
-type cName={cName:string}
+import { resultTypeCountry,countryName } from '../../types'
 
-function Country({cName}:cName) {
-  type resultType={
-    name:string,
-    nativeName:string,
-    region:string,
-    subregion:string,
-    capital:string,
-    flag:string,
-    population:number,
-    topLevelDomain:string,
-    currencies:[{name:string}],
-    languages:[{name:string}],
-    borders:string[]
-  }
-  const[result,setResult]= useState<resultType[]>([])
+function Country({countryName}:countryName) {
+
+  const[result,setResult]= useState<resultTypeCountry[]>([])
   const[loading,setLoading]= useState <boolean>(false)
   const [err, setErr] = useState<boolean>(false)
   const [border, setBorder] = useState<string[]>(['None'])
   const [boolborder, setBoolborder] = useState<boolean>(false)
+  
   useEffect(()=>{
-    singleCountry(setLoading,setErr,setBorder,setBoolborder,setResult,cName)
-  },[cName])
+    singleCountry(setLoading,setErr,setBorder,setBoolborder,setResult,countryName)
+  },[countryName])
 
 
   return (
@@ -40,8 +28,8 @@ function Country({cName}:cName) {
         !err && !loading && result.map((val, ind)=>(
           <div key={ind+'box'} className=''>
             <div className='grid px-4 laptop:grid-cols-2 laptop:px-0 laptop:gap-20 pc:gap-36' key={ind+'main'}>
-              <div className=' rounded-2xl overflow-clip laptop:min-w-[450px] pc:h-full'>
-              <img className=' w-full h-full rounded-2xl laptop:max-h-96 pc:h-full' key={ind+'flag'} src={val.flag} alt={'Flag of '+val.name}/>
+              <div className=' rounded-2xl overflow-clip laptop:max-h-96 laptop:min-w-[450px] pc:h-full'>
+              <img className=' object-cover w-full h-full rounded-2xl' key={ind+'flag'} src={val.flag} alt={'Flag of '+val.name}/>
               </div>
               <div className='laptop:pt-6 pc:pt-[5%]' key={ind+'content'}>
                 <div className='text-xl font-extrabold mt-11 mb-4 laptop:mt-0 laptop:mb-0' key={ind+'name'}>{val.name}</div>

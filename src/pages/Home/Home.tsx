@@ -2,14 +2,9 @@ import  { useEffect, useState } from 'react'
 import Filter from '../../components/Filter/Filter'
 import {Link} from 'react-router-dom'
 import { all } from '../../api/api'
+import { resultType } from '../../types'
 function Home() {
-  type resultType={
-    name:string,
-    region:string,
-    capital:string,
-    flag:string,
-    population:number
-  }
+
   const[result,setResult]= useState<resultType[]>([])
   const[loading,setLoading]= useState <boolean>(false)
   const [search, setSearch] = useState<string>('')
