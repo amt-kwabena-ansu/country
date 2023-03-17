@@ -29,7 +29,7 @@ function Country({countryName}:countryName) {
           <div key={ind+'box'} className=''>
             <div className='grid px-4 laptop:grid-cols-2 laptop:px-0 laptop:gap-20 pc:gap-36' key={ind+'main'}>
               <div className=' rounded-2xl overflow-clip laptop:max-h-96 laptop:min-w-[450px] pc:h-full'>
-              <img className=' object-cover w-full h-full rounded-2xl' key={ind+'flag'} src={val.flag} alt={'Flag of '+val.name}/>
+              <img className=' object-fill h-full rounded-2xl' key={ind+'flag'} src={val.flag} alt={'Flag of '+val.name}/>
               </div>
               <div className='laptop:pt-6 pc:pt-[5%]' key={ind+'content'}>
                 <div className='text-xl font-extrabold mt-11 mb-4 laptop:mt-0 laptop:mb-0' key={ind+'name'}>{val.name}</div>
