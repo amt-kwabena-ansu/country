@@ -35,7 +35,7 @@ function Home() {
         <Filter filter={filter} search={search} setFilter={setFilter} setSearch={setSearch}/>
         {err && <div className='text-2xl font-bold'> <h1>We sorry there was something wrong</h1></div>}
         {
-          !err && loading && <div key='loadingHome' className='text-2xl font-bold'><img src="/submiting.gif" alt="loading" /></div>
+          !err && loading && <div key='loadingHome' className='text-2xl font-bold self-center mt-6'><img src="/submiting.gif" alt="loading" /></div>
         }
         <div className=' grid mx-12 grid-cols-1 gap-14 laptop:mx-0 laptop:grid-cols-4 laptop:gap-8 pc:gap-14' >
           {!err && !loading && reOganize().map((val,ind)=>(
